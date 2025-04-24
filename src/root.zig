@@ -120,7 +120,7 @@ pub const handle_type = struct {
 
 /// See `ArrayBackedAligned`.
 pub fn ArrayBacked(Handle: type, Item: type, empty: Item) type {
-    return ArrayBackedAligned(Handle, Item, @alignOf(Item), empty);
+    return ArrayBackedAligned(Handle, Item, .fromByteUnits(@alignOf(Item)), empty);
 }
 
 /// A pool backed by an array and a `HandleHeap`. Useful when external iteration over the allocated
@@ -141,7 +141,7 @@ pub fn ArrayBackedAligned(
     /// want to create a multi pool.
     Item: type,
     /// The alignment of the pool.
-    alignment: u29,
+    alignment: std.mem.Alignment,
     /// The value to write over removed items in the items array, often but not always `null`. May
     /// be set to `undefined` if this feature is not needed.
     empty: Item,
@@ -149,7 +149,7 @@ pub fn ArrayBackedAligned(
     return struct {
         pub const Handles = HandleHeap(Handle);
 
-        items: *align(alignment) [Handles.capacity]Item,
+        items: *align(alignment.toByteUnits()) [Handles.capacity]Item,
         handles: Handles,
 
         pub fn init(allocator: Allocator) Allocator.Error!@This() {

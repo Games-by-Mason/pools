@@ -2,6 +2,7 @@
     .name = .pools,
     .fingerprint = 0x1f7a78b75d4eadd9,
     .version = "0.0.0",
+    .minimum_zig_version = "0.15.0-dev.388+05e217607",
     .dependencies = .{},
     .paths = .{
         "build.zig",
